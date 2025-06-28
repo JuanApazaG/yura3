@@ -192,13 +192,13 @@ class PerfilScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: const Padding(
           padding: EdgeInsets.only(left: 8.0, top: 8),
           child: Text(
-            'Perfil',
+            'Pacientews',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,

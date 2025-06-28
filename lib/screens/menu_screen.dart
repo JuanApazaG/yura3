@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gestor_de_membresias/screens/items_menu/home_screen.dart';
-//import 'package:gestor_de_membresias/screens/items_menu/membresias_screen.dart';
+import 'package:gestor_de_membresias/screens/items_menu/consultas_screen.dart';
+import 'package:gestor_de_membresias/screens/items_menu/microfono_screen.dart';
+import 'package:gestor_de_membresias/screens/items_menu/pacientes_screen.dart';
 import 'package:gestor_de_membresias/screens/items_menu/perfil_screen.dart';
-import 'package:gestor_de_membresias/screens/items_menu/usuarios_membresias_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   final VoidCallback onLogout;
@@ -15,17 +15,36 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   int paginaActual = 0;
 
+  void _abrirPerfil() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PerfilScreen(onLogout: widget.onLogout),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> paginas = [
-      const HomeScreen(),
-      const UsuariosMembresiasScreen(),
-      //const MembresiasScreen(),
-      PerfilScreen(
-        onLogout: widget.onLogout,
-      ), // <-- Aquí pasas el callback correctamente
+      const ConsultasScreen(),
+      const MicrofonoScreen(),
+      const PacientesScreen(),
+    ];
+    final List<String> titulos = [
+      'Consultas',
+      'Dictado',
+      'Pacientes',
     ];
     return Scaffold(
+      appBar: AppBar(
+        title: Text(titulos[paginaActual]),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: _abrirPerfil,
+          ),
+        ],
+      ),
       body: paginas[paginaActual],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: paginaActual,
@@ -36,13 +55,26 @@ class _MenuScreenState extends State<MenuScreen> {
         },
         selectedItemColor: Colors.blue,
         selectedIconTheme: const IconThemeData(size: 34),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle),
-            label: 'Mis Membresías',
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Consultas',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+          BottomNavigationBarItem(
+            icon: Container(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(8),
+              child: const Icon(Icons.mic, color: Colors.white, size: 34),
+            ),
+            label: '',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.supervised_user_circle),
+            label: 'Pacientes',
+          ),
         ],
       ),
     );
