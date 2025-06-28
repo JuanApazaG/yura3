@@ -14,6 +14,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   int paginaActual = 0;
+  bool microfonoActivo = false;
 
   void _abrirPerfil() {
     Navigator.of(context).push(
@@ -23,11 +24,25 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
+  void _abrirMicrofono() async {
+    setState(() {
+      microfonoActivo = true;
+    });
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MicrofonoScreen(),
+      ),
+    );
+    setState(() {
+      microfonoActivo = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> paginas = [
       const ConsultasScreen(),
-      const MicrofonoScreen(),
+      const MicrofonoScreen(), // No se usa directamente, solo para el índice
       const PacientesScreen(),
     ];
     final List<String> titulos = [
@@ -45,19 +60,31 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ],
       ),
-      body: paginas[paginaActual],
+      body: paginas[paginaActual == 1 ? 0 : paginaActual], // Nunca mostrar MicrofonoScreen aquí
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: paginaActual,
         onTap: (int index) {
-          setState(() {
-            paginaActual = index;
-          });
+          if (microfonoActivo) {
+            // Si el micrófono está activo, solo permitir el botón central
+            if (index == 1) _abrirMicrofono();
+            return;
+          }
+          if (index == 1) {
+            _abrirMicrofono();
+          } else {
+            setState(() {
+              paginaActual = index;
+            });
+          }
         },
         selectedItemColor: Colors.blue,
         selectedIconTheme: const IconThemeData(size: 34),
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.assignment,
+              color: microfonoActivo ? Colors.grey : null,
+            ),
             label: 'Consultas',
           ),
           BottomNavigationBarItem(
@@ -71,8 +98,11 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             label: '',
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.supervised_user_circle,
+              color: microfonoActivo ? Colors.grey : null,
+            ),
             label: 'Pacientes',
           ),
         ],
