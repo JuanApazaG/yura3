@@ -125,11 +125,14 @@ class _MicrofonoScreenState extends State<MicrofonoScreen> with SingleTickerProv
   }
 
   Future<void> _importarAudio() async {
+    print('Botón importar presionado');
     try {
-      final status = await Permission.storage.request();
-      if (!status.isGranted) {
+      final storageStatus = await Permission.storage.request();
+      final audioStatus = await Permission.audio.request();
+      print('Permiso storage: ${storageStatus.isGranted}, audio: ${audioStatus.isGranted}');
+      if (!storageStatus.isGranted && !audioStatus.isGranted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Permiso de almacenamiento denegado.')),
+          const SnackBar(content: Text('Permiso de almacenamiento o audio denegado.')),
         );
         return;
       }
@@ -137,6 +140,7 @@ class _MicrofonoScreenState extends State<MicrofonoScreen> with SingleTickerProv
         type: FileType.custom,
         allowedExtensions: ['m4a', 'aac', 'wav', 'mp3', 'ogg'],
       );
+      print('Resultado del picker: $result');
       if (result != null && result.files.single.path != null) {
         final filePath = result.files.single.path!;
         print('Archivo importado: $filePath');
