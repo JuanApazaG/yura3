@@ -198,7 +198,7 @@ class PerfilScreen extends StatelessWidget {
         title: const Padding(
           padding: EdgeInsets.only(left: 8.0, top: 8),
           child: Text(
-            'Perfilr',
+            'Perfir',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
