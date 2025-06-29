@@ -52,7 +52,17 @@ class _MenuScreenState extends State<MenuScreen> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text(titulos[paginaActual]),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/imagenes/logoJuli.png',
+              width: 40,
+              height: 40,
+            ),
+            const SizedBox(width: 12),
+            Text(titulos[paginaActual]),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),

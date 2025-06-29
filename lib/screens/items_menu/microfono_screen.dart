@@ -191,9 +191,14 @@ class _MicrofonoScreenState extends State<MicrofonoScreen> with SingleTickerProv
         // Micrófono animado
         _AnimatedMic(),
         const SizedBox(height: 32),
-        Text(
-          _isRecording ? 'Escuchando consulta...' : 'Grabación finalizada.',
-          style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+        Center(
+          child: Text(
+            _isRecording ? 'Escuchando consulta...' : 'Grabación finalizada.',
+            style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         const SizedBox(height: 48),
         Row(

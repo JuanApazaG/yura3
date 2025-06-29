@@ -12,11 +12,14 @@ class InformeScreen extends StatefulWidget {
   const InformeScreen({Key? key, this.audioFilePath}) : super(key: key);
 
   static final List<Map<String, String>> tiposInforme = [
-    {'nombre': 'Ren', 'icono': 'pdf', 'tipo_enum': 'EVOLUCION_GERIATRICA'},
-    {'nombre': 'Medio', 'icono': 'pdf', 'tipo_enum': 'EVOLUCION_GERIATRICA'},
-    {'nombre': 'Informe de evolución', 'icono': 'pdf', 'tipo_enum': 'EVOLUCION_GERIATRICA'},
-    {'nombre': 'Informe completo', 'icono': 'pdf', 'tipo_enum': 'EVOLUCION_GERIATRICA'},
-    {'nombre': 'Nota rápida', 'icono': 'pdf', 'tipo_enum': 'EVOLUCION_GERIATRICA'},
+    {'nombre': 'Evolución Geriátrica', 'icono': 'word', 'tipo_enum': 'EVOLUCION_GERIATRICA'},
+    {'nombre': 'Epicrisis', 'icono': 'word', 'tipo_enum': 'EPICRISIS'},
+    {'nombre': 'Certificado Médico', 'icono': 'word', 'tipo_enum': 'CERTIFICADO_MEDICO'},
+    {'nombre': 'Referencia Médica', 'icono': 'word', 'tipo_enum': 'REFERENCIA_MEDICA'},
+    {'nombre': 'Informe de Laboratorio', 'icono': 'word', 'tipo_enum': 'INFORME_LABORATORIO'},
+    {'nombre': 'Informe de Consulta Externa', 'icono': 'word', 'tipo_enum': 'CONSULTA_EXTERNA'},
+    {'nombre': 'Informe de Urgencias', 'icono': 'word', 'tipo_enum': 'INFORME_URGENCIAS'},
+    {'nombre': 'Nota de Evolución', 'icono': 'word', 'tipo_enum': 'NOTA_EVOLUCION'},
   ];
 
   @override
@@ -108,7 +111,7 @@ class _InformeScreenState extends State<InformeScreen> {
       _errorMsg = null;
     });
     try {
-      var uri = Uri.parse("https://1a5d-190-104-20-155.ngrok-free.app/procesar_informe");
+      var uri = Uri.parse("https://884d-190-104-20-155.ngrok-free.app/procesar_informe");
       var request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath(
           'audio',
@@ -226,8 +229,11 @@ class _InformeScreenState extends State<InformeScreen> {
                             : BorderSide.none,
                       ),
                       child: ListTile(
-                        leading: Icon(Icons.picture_as_pdf,
-                            color: selected ? Colors.white : Colors.red, size: 36),
+                        leading: Image.asset(
+                          'assets/imagenes/logo_word.png',
+                          width: 36,
+                          height: 36,
+                        ),
                         title: Text(
                           tipo['nombre']!,
                           style: TextStyle(
