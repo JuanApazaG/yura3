@@ -48,6 +48,7 @@ dependencies:
   path: ^1.8.3
   file_picker: ^10.2.0
   open_file: ^3.5.10
+  flutter_launcher_icons: ^0.14.4
   # file_picker: ^6.1.1
 
 dev_dependencies:
@@ -60,6 +61,25 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+# Configuración para el ícono de la app
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/imagenes/logoJuli.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/imagenes/logoJuli.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/imagenes/logoJuli.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/imagenes/logoJuli.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

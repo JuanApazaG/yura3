@@ -5,8 +5,8 @@ import 'package:gestor_de_membresias/screens/items_menu/pacientes_screen.dart';
 import 'package:gestor_de_membresias/screens/items_menu/perfil_screen.dart';
 
 class MenuScreen extends StatefulWidget {
-  final VoidCallback onLogout;
-  const MenuScreen({super.key, required this.onLogout});
+  final VoidCallback? onLogout;
+  const MenuScreen({super.key, this.onLogout});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();

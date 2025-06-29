@@ -6,8 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PerfilScreen extends StatelessWidget {
-  final VoidCallback onLogout;
-  const PerfilScreen({super.key, required this.onLogout});
+  final VoidCallback? onLogout;
+  const PerfilScreen({super.key, this.onLogout});
 
   void _mostrarFormularioEdicion(
     BuildContext context,
@@ -207,11 +207,12 @@ class PerfilScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black),
-            onPressed: onLogout,
-            tooltip: 'Cerrar sesión',
-          ),
+          if (onLogout != null)
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.black),
+              onPressed: onLogout,
+              tooltip: 'Cerrar sesión',
+            ),
         ],
       ),
       body: FutureBuilder<Usuario>(
