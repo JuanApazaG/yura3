@@ -108,7 +108,7 @@ class _InformeScreenState extends State<InformeScreen> {
       _errorMsg = null;
     });
     try {
-      var uri = Uri.parse("https://dd78-190-104-20-155.ngrok-free.app/procesar_informe");
+      var uri = Uri.parse("https://1a5d-190-104-20-155.ngrok-free.app/procesar_informe");
       var request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath(
           'audio',
