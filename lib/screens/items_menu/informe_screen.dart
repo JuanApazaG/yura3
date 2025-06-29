@@ -4,6 +4,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 class InformeScreen extends StatefulWidget {
   final String? audioFilePath;
@@ -28,8 +30,8 @@ class _InformeScreenState extends State<InformeScreen> {
   Duration _position = Duration.zero;
   int? _selectedIndex;
   bool _isLoading = false;
-  dynamic _jsonResponse;
   String? _errorMsg;
+  String? _docxPath;
 
   @override
   void initState() {
@@ -102,7 +104,7 @@ class _InformeScreenState extends State<InformeScreen> {
     }
     setState(() {
       _isLoading = true;
-      _jsonResponse = null;
+      _docxPath = null;
       _errorMsg = null;
     });
     try {
@@ -118,10 +120,23 @@ class _InformeScreenState extends State<InformeScreen> {
       var response = await http.Response.fromStream(streamedResponse);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        setState(() {
-          _jsonResponse = data;
-          _isLoading = false;
-        });
+        if (data['documento_base64'] != null) {
+          // Decodificar y guardar el docx
+          final bytes = base64Decode(data['documento_base64']);
+          final tempDir = await getTemporaryDirectory();
+          final filePath = path.join(tempDir.path, 'documento_generado.docx');
+          final file = File(filePath);
+          await file.writeAsBytes(bytes);
+          setState(() {
+            _docxPath = filePath;
+            _isLoading = false;
+          });
+        } else {
+          setState(() {
+            _errorMsg = 'No se recibió el documento.';
+            _isLoading = false;
+          });
+        }
       } else {
         setState(() {
           _errorMsg = 'Error del servidor: ${response.statusCode}';
@@ -134,6 +149,11 @@ class _InformeScreenState extends State<InformeScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _abrirDocx() async {
+    if (_docxPath == null) return;
+    await OpenFile.open(_docxPath!);
   }
 
   @override
@@ -166,24 +186,29 @@ class _InformeScreenState extends State<InformeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(_errorMsg!, style: const TextStyle(color: Colors.red)),
               ),
-            if (_jsonResponse != null)
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      const JsonEncoder.withIndent('  ').convert(_jsonResponse),
-                      style: const TextStyle(fontSize: 16, color: Colors.black87, fontFamily: 'monospace'),
-                    ),
+            if (_docxPath != null)
+              Column(
+                children: [
+                  const Text(
+                    'Documento generado:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      elevation: 4,
+                    ),
+                    onPressed: _abrirDocx,
+                    icon: const Icon(Icons.description),
+                    label: const Text('Ver documento'),
+                  ),
+                ],
               ),
-            if (_jsonResponse == null && !_isLoading)
+            if (_docxPath == null && !_isLoading)
               Expanded(
                 child: ListView.builder(
                   itemCount: InformeScreen.tiposInforme.length,
